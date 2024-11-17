@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cat Facts</title>
+</head>
+<body>
+  <h1>Cat Facts</h1>
+  <p>Click the button below to load random facts about cats!</p>
+  <button onclick="fetchCatFacts()">Get Cat Facts</button>
+
+  <div id="cat-facts"></div>
+
+  <script>
+    async function fetchCatFacts() {
+      try {
+        
+        const apiUrl = 'https://cat-fact.herokuapp.com/facts';
+        
+        
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        
+        const factsDiv = document.getElementById('cat-facts');
+        factsDiv.innerHTML = '';
+
+        if (data && data.length > 0) {
+          data.forEach(fact => {
+            const factDiv = document.createElement('div');
+            factDiv.innerHTML = `
+              <p>${fact.text}</p>
+              <hr>
+            `;
+            factsDiv.appendChild(factDiv);
+          });
+        } else {
+          factsDiv.innerHTML = '<p>No facts available.</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching cat facts:', error);
+        document.getElementById('cat-facts').innerHTML = '<p>Error fetching facts. Please try again later.</p>';
+      }
+    }
+  </script>
+</body>
+</html>
